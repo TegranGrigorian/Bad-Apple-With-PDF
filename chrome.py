@@ -11,7 +11,7 @@ class chrome():
 	def close_chrome(self):
 		pyautogui.hotkey("ctrl", "w")
   
-	def reloadfaggot(self):
+	def reload(self):
 		pyautogui.hotkey("f5")
 
 
