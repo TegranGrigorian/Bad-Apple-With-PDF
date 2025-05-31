@@ -1,53 +1,42 @@
 #main
 import os
-import time
-import cv2
-
-#imports
+import asyncio
+import pyautogui
 from generate_pdf import GeneratePdf
 from chrome import chrome
-import subprocess
+
+#global -> change these if you want
 frames_dir = f"bad_apple_frames"
+video_dir = f"bad_apple_video"
 
-#wsl bad
-def take_screenshot_windows(save_path):
-    subprocess.run([
-        "powershell.exe",
-        "-Command",
-        f"Add-Type -AssemblyName System.Windows.Forms; "
-        f"$bmp = New-Object System.Drawing.Bitmap([System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Width, [System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Height); "
-        f"$graphics = [System.Drawing.Graphics]::FromImage($bmp); "
-        f"$graphics.CopyFromScreen(0, 0, 0, 0, $bmp.Size); "
-        f"$bmp.Save('{save_path}');"
-    ])
+# Ensure the screenshot directory exists
+os.makedirs(video_dir, exist_ok=True)
 
-def main():
+def take_screenshot_linux(save_path):
+    screenshot = pyautogui.screenshot()
+    screenshot.save(save_path)
+
+async def main():
     GenPdf = GeneratePdf(rf"bad_apple.pdf")
     image_files = sorted(os.listdir(frames_dir), key=lambda x: int(x.split('-')[0]))
 
+    Chrome = chrome(rf"/home/tegran-grigorian/Documents/Projects/Summer-2025/Bad-Apple-With-PDF/bad_apple.pdf")
+    Chrome.open_chrome()
+    await asyncio.sleep(2)
     for count, image in enumerate(image_files, 1):
         imgpath = os.path.join(frames_dir, image)
         
-        if ((count % 30) == 0):
+        if ((count % 1) == 0): #count % 1 mean its every frame, 30 fps, if you wnat 15 fps you would do % 2
             GenPdf.generate(imgpath)
             print("Found file! make pdf")
-            Chrome = chrome(rf"\\wsl.localhost\Ubuntu\home\tegran\Documents\bad_apple\bad_apple.pdf")
-            Chrome.open_chrome()
-            print("opened")
-            time.sleep(3)  
-            screenshot_path = rf"C:\Users\boysg\Pictures\bad_apple\bad_apple_image{count // 30}.png"
-            take_screenshot_windows(screenshot_path)
-            print("time ended making screenshot")
-            
-            #avoid race condition and pipe blow up
-            time.sleep(0.5)  
-            Chrome.close_chrome()
-            print(f"Did {screenshot_path}")
-
+            Chrome.reload()
+            await asyncio.sleep(1)
+            screenshot_path = os.path.join(video_dir, f"frame_{count:04d}.png")
+            take_screenshot_linux(screenshot_path)
+            print(f"Screenshot saved: {screenshot_path}")
         else:
-            print("ignore")
-    print("yay!")
+            print("Kendale")
 
 
-#run main
 main()
+asyncio.run(main())

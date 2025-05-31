@@ -15,8 +15,7 @@ class GeneratePdf():
 		pagew = pdf.w
 		pageh = pdf.h
 		x = (pagew - imgwmm) // 2
-		y = (pageh - imghmm) // 2
+		y = (pageh - imghmm) // 4
 		pdf.image(img_path, x=x,y=y,w=imgwmm,h=imghmm)
 		pdf.output(self.pdf_path)
-
 
