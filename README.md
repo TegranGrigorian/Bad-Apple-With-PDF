@@ -1,6 +1,6 @@
 Very very simple Bad Apple Rendering with PDF
 
-This took me an hour to code, while making a "tutorial"
+This took me an hour to code while making a "tutorial"
 
 Steps:
 1. Clone
