@@ -34,7 +34,7 @@ async def main():
         if ((count % 1) == 0):
             GenPdf.generate(imgpath)
             print("Found file! make pdf")
-            Chrome.reloadfaggot()
+            Chrome.reload()
             await asyncio.sleep(0.2)
             
             
