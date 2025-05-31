@@ -1,5 +1,7 @@
 Very very simple Bad Apple Rendering with PDF
 
+This took me an hour to code, while making a "tutorial"
+
 Steps:
 1. Clone
 2. make the folders listed in main.py global space
